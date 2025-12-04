@@ -28,7 +28,7 @@ class AppConfig {
       rpExplorerUrl: `https://${networkPrefix}rocketscan.io`,
       beaconchaInUrl: `https://${networkPrefix}beaconcha.in`,
       explorerUrl: `https://${networkPrefix}etherscan.io`,
-      package: isMainnet ? `rocketpool.public.dappnode` : `rocketpool-testnet.public.dappnode`,
+      package: isMainnet ? `rocketpool.dnp.dappnode` : `rocketpool-testnet.public.dappnode`,
     };
   }
 
