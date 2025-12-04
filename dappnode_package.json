@@ -9,7 +9,7 @@
   "author": "dappnode",
   "categories": ["Developer tools"],
   "links": {
-    "ui": "http://rocketpool.dnp.dappnode/",
+    "ui": "http://rocketpool.dappnode/",
     "homepage": "https://rocketpool.net/"
   },
   "globalEnvs": [
