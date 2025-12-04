@@ -6,6 +6,10 @@ export function toWei(ether: number): number {
   return ether * 10 ** 18;
 }
 
+export function toWeiString(ether: number): string {
+  return BigInt(ether).toString();
+}
+
 export function toEther(wei: number): number {
   return wei / 10 ** 18;
 }
@@ -35,6 +39,11 @@ export function enoughEthBalance(
   const rplBalance = nodeStatus?.accountBalances.rpl ?? 0;
   const is8EthPool = rplBalance >= minimumRpl8Eth;
   return is8EthPool ? ethBalance >= minimum8Eth : ethBalance >= minimum16Eth;
+}
+
+export function ethBalanceGreaterThanMinStake(ethBalance: number): boolean {
+  const minStake = BigInt(32 * 10 ** 18);
+  return BigInt(ethBalance) > minStake;
 }
 
 export const escapeNewLine = (text: string) => text.replace(/(\\n)/g, "\n");

@@ -5,13 +5,12 @@ import { CanRegisterNode } from "../types/CanRegisterNode";
 import { NodeSync } from "../types/NodeSync";
 import { NetworkRplPrice } from "../types/NetworkRplPrice";
 import { MinipoolStatus } from "../types/MinipoolStatus";
-import { NodeCanRegister } from "../types/NodeCanRegister";
 import { TxResponse } from "../types/TxResponse";
 import { WaitResponse } from "../types/WaitResponse";
 import { NodeCanSetWithdrawalAddress } from "../types/NodeCanSetWithdrawalAddress";
 import { NodeCanSetSmoothingPool } from "../types/NodeCanSetSmoothingPool";
 import { CanDeposit } from "../types/CanDeposit";
-import { toWei } from "../utils/Utils";
+import { toWei, toWeiString } from "../utils/Utils";
 import { NodeFee } from "../types/NodeFee";
 import { StakeRplApprove } from "../types/StakeRplApprove";
 import { CanStake } from "../types/CanStake";
@@ -101,12 +100,6 @@ export class AppService {
     });
     return response.data;
   }
-  public async getNodeCanRegister(): Promise<NodeCanRegister> {
-    const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node can-register Etc/UTC`,
-    });
-    return response.data.canRegister;
-  }
   public async nodeRegister(): Promise<TxResponse> {
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
       cmd: `node register Etc/UTC`,
@@ -115,13 +108,13 @@ export class AppService {
   }
   public async getNodeCanSetWithdrawalAddress(address: string): Promise<NodeCanSetWithdrawalAddress> {
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node can-set-withdrawal-address ${address} yes`,
+      cmd: `node can-set-primary-withdrawal-address ${address} yes`,
     });
     return response.data;
   }
   public async nodeSetWithdrawalAddress(address: string): Promise<TxResponse> {
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node set-withdrawal-address ${address} yes`,
+      cmd: `node set-primary-withdrawal-address ${address} yes`,
     });
     return response.data;
   }
@@ -150,34 +143,37 @@ export class AppService {
     return response.data;
   }
   public async stakeRplApprove(amount: number): Promise<StakeRplApprove> {
+    const amountWei = toWeiString(amount);
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node stake-rpl-approve-rpl ${amount}`,
+      cmd: `node stake-rpl-approve-rpl ${amountWei}`,
     });
     return response.data;
   }
   public async getNodeCanStakeRpl(amount: number): Promise<CanStake> {
+    const amountWei = toWeiString(amount);
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node can-stake-rpl ${amount}`,
+      cmd: `node can-stake-rpl ${amountWei}`,
     });
     return response.data;
   }
   public async nodeStakeRpl(amount: number): Promise<StakeResponse> {
+    const amountWei = toWeiString(amount);
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node stake-rpl ${amount}`,
+      cmd: `node stake-rpl ${amountWei}`,
     });
     return response.data;
   }
   public async canDeposit(ethPool: number, nodeFee: number): Promise<CanDeposit> {
     const amount = toWei(ethPool);
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node can-deposit ${amount} ${nodeFee} 0`,
+      cmd: `node can-deposit ${amount} ${nodeFee} 0 false`,
     });
     return response.data;
   }
   public async nodeDeposit(ethPool: number, nodeFee: number, useCreditBalance: boolean): Promise<DepositResponse> {
     const amount = toWei(ethPool);
     const response = await this.api.post(`/api/v1/rocketpool-command`, {
-      cmd: `node deposit ${amount} ${nodeFee} 0 ${useCreditBalance} true`,
+      cmd: `node deposit ${amount} ${nodeFee} 0 ${useCreditBalance} false true`,
     });
     return response.data;
   }
